@@ -102,15 +102,14 @@
     </div>
 
     <h1>সব চ্যানেল</h1>
-<h3> ভিডিও প্লে হতে কিছু সময় লাগতে পারে </h3>
+    <h3>ভিডিও প্লে হতে কিছু সময় লাগতে পারে</h3>
     <div id="channelList"></div>
 
     <div class="button-container">
-       
-        <button class="action-button" onclick="window.location.href=https://t.me/manikcable">
+        <button class="action-button" onclick="window.location.href='https://t.me/manikcable'">
             🛰️
         </button>
-        <button class="action-button" onclick="window.location.href=https://apk.e-droid.net/apk/app3182293-zia19o.apk?v=12">
+        <button class="action-button" onclick="window.location.href='https://apk.e-droid.net/apk/app3182293-zia19o.apk?v=12'">
             🎥
         </button>
     </div>
@@ -118,10 +117,10 @@
     <script src="https://vjs.zencdn.net/7.15.4/video.js"></script> <!-- Video.js Script -->
 
     <script>
-        const m3uUrl = "https://m3u.work/RD9P6YPl"; 
-        const whatsappLink = "YOUR_WHATSAPP_LINK";  
-        const customLink1 = "YOUR_CUSTOM_LINK_1";  
-        const customLink2 = "YOUR_CUSTOM_LINK_2";  
+        const m3uUrl = "https://m3u.work/RD9P6YPl";  // M3U Link
+        const whatsappLink = "YOUR_WHATSAPP_LINK";  // Replace with actual WhatsApp link
+        const customLink1 = "YOUR_CUSTOM_LINK_1";  // Replace with custom link
+        const customLink2 = "YOUR_CUSTOM_LINK_2";  // Replace with custom link
 
         async function loadM3U() {
             const response = await fetch(m3uUrl);
