@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://vjs.zencdn.net/7.15.4/video-js.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f4f4f4;
+            color: #333;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        h1, h2 {
+            color: inherit;
+        }
+        #searchBox {
+            width: 50%;
+            padding: 10px;
+            margin: 20px;
+            font-size: 18px;
+            background-color: white;
+            color: black;
+            border: 1px solid #ccc;
+        }
+        #playerContainer {
+            width: 70%;
+            margin: auto;
+            margin-bottom: 20px;
+        }
+        #videoPlayer {
+            width: 100%;
+            height: 300px;
+            border-radius: 10px;
+            background: black;
+        }
+        #channelList {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            padding: 20px;
+        }
+        .channel {
+            background: white;
+            padding: 10px;
+            box-shadow: 2px 2px 10px rgba(0,0,0,0.1);
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+            text-align: center;
+            width: 150px;
+        }
+        .channel:hover {
+            transform: scale(1.05);
+        }
+        .channel img {
+            width: 100%;
+            height: 80px;
+            object-fit: contain;
+            border-radius: 5px;
+            background: #ddd;
+        }
+        .channel h3 {
+            font-size: 14px;
+            margin: 10px 0 0;
+        }
+        .button-container {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            display: flex;
+            gap: 10px;
+        }
+        .action-button {
+            background-color: #25D366;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            padding: 10px;
+            font-size: 18px;
+            cursor: pointer;
+        }
+        .action-button img {
+            width: 25px;
+            height: 25px;
+        }
+    </style>
+</head>
+<body>
+<h1> MJ-FLIX </h1>
+    <h1>লাইভ টিভি চ্যানেল</h1>
+
+    <input type="text" id="searchBox" placeholder="চ্যানেলের নাম লিখুন..." onkeyup="searchChannel()">
+
+    <div id="playerContainer">
+        <video id="videoPlayer" class="video-js vjs-default-skin vjs-big-play-centered" controls autoplay>
+            <source id="videoSource" src="" type="application/x-mpegURL">
+            আপনার ব্রাউজার ভিডিও সাপোর্ট করে না।
+        </video>
+    </div>
+
+    <h1>সব চ্যানেল</h1>
+<h3> ভিডিও প্লে হতে কিছু সময় লাগতে পারে </h3>
+    <div id="channelList"></div>
+
+    <div class="button-container">
+       
+        <button class="action-button" onclick="window.location.href=https://t.me/manikcable">
+            🛰️
+        </button>
+        <button class="action-button" onclick="window.location.href=https://apk.e-droid.net/apk/app3182293-zia19o.apk?v=12">
+            🎥
+        </button>
+    </div>
+
+    <script src="https://vjs.zencdn.net/7.15.4/video.js"></script> <!-- Video.js Script -->
+
+    <script>
+        const m3uUrl = "https://m3u.work/RD9P6YPl"; 
+        const whatsappLink = "YOUR_WHATSAPP_LINK";  
+        const customLink1 = "YOUR_CUSTOM_LINK_1";  
+        const customLink2 = "YOUR_CUSTOM_LINK_2";  
+
+        async function loadM3U() {
+            const response = await fetch(m3uUrl);
+            const text = await response.text();
+            const lines = text.split("\n");
+
+            let channels = [];
+            for (let i = 0; i < lines.length; i++) {
+                if (lines[i].startsWith("#EXTINF")) {
+                    const nameMatch = lines[i].match(/,(.+)/);
+                    const logoMatch = lines[i].match(/tvg-logo="(.+?)"/);
+                    
+                    let name = nameMatch ? nameMatch[1] : "Unknown";
+                    name = name.replace(/\s*-\s*[^-]+$/, "").trim();
+                    const logo = logoMatch ? logoMatch[1] : "https://via.placeholder.com/150";
+                    const url = lines[i + 1] ? lines[i + 1].trim() : "";
+
+                    if (url.startsWith("http")) {
+                        channels.push({ name, logo, url });
+                    }
+                }
+            }
+            displayChannels(channels);
+        }
+
+        function displayChannels(channels) {
+            const list = document.getElementById("channelList");
+            list.innerHTML = "";
+
+            channels.forEach(channel => {
+                const div = document.createElement("div");
+                div.classList.add("channel");
+                div.innerHTML = `
+                    <img src="${channel.logo}" alt="${channel.name}">
+                    <h3>${channel.name}</h3>
+                `;
+                div.onclick = () => playChannel(channel.url);
+                list.appendChild(div);
+            });
+
+            if (channels.length > 0) {
+                playChannel(channels[0].url);
+            }
+        }
+
+        function playChannel(url) {
+            document.getElementById("videoSource").src = url;
+            document.getElementById("videoPlayer").load();
+            document.getElementById("playerContainer").scrollIntoView({ behavior: "smooth" });
+        }
+
+        function searchChannel() {
+            const query = document.getElementById("searchBox").value.toLowerCase();
+            const channels = document.querySelectorAll(".channel");
+
+            channels.forEach(channel => {
+                const name = channel.querySelector("h3").innerText.toLowerCase();
+                channel.style.display = name.includes(query) ? "block" : "none";
+            });
+        }
+
+        window.onload = loadM3U;
+    </script>
+
+</body>
+</html>
