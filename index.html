@@ -3,7 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>লাইভ টিভি স্ট্রিমিং</title>
+
+    <!-- Include Video.js CSS -->
     <link href="https://vjs.zencdn.net/7.15.4/video-js.css" rel="stylesheet">
+
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -89,9 +93,8 @@
     </style>
 </head>
 <body>
-<h1> MJ-FLIX </h1>
-    <h1>লাইভ টিভি চ্যানেল</h1>
 
+    <h1>MJ-FLIX লাইভ টিভি</h1>
     <input type="text" id="searchBox" placeholder="চ্যানেলের নাম লিখুন..." onkeyup="searchChannel()">
 
     <div id="playerContainer">
@@ -101,7 +104,7 @@
         </video>
     </div>
 
-    <h1>সব চ্যানেল</h1>
+    <h2>সব চ্যানেল</h2>
     <h3>ভিডিও প্লে হতে কিছু সময় লাগতে পারে</h3>
     <div id="channelList"></div>
 
@@ -114,13 +117,12 @@
         </button>
     </div>
 
-    <script src="https://vjs.zencdn.net/7.15.4/video.js"></script> <!-- Video.js Script -->
+    <!-- Include Video.js & HLS Plugin -->
+    <script src="https://vjs.zencdn.net/7.15.4/video.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/videojs-contrib-hls@5.0.0/dist/videojs-contrib-hls.min.js"></script>
 
     <script>
-        const m3uUrl = "https://m3u.work/RD9P6YPl";  // M3U Link
-        const whatsappLink = "YOUR_WHATSAPP_LINK";  // Replace with actual WhatsApp link
-        const customLink1 = "YOUR_CUSTOM_LINK_1";  // Replace with custom link
-        const customLink2 = "YOUR_CUSTOM_LINK_2";  // Replace with custom link
+        const m3uUrl = "https://m3u.work/RD9P6YPl";  // Replace with your m3u URL
 
         async function loadM3U() {
             const response = await fetch(m3uUrl);
