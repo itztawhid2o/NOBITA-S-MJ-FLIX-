@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MJ-FLIX live tv</title>
+    <title>IPTV Channel List</title>
     <style>
         body {
             background-color: #161616;
@@ -142,18 +142,18 @@
 </head>
 <body>
     <video autoplay muted loop class="background-video">
-        <source src="https://jmp.sh/s/W8PA44bz6sPNthEqClxe" type="video/mp4">
+        <source src="https://www.pexels.com/video/10452098/download/" type="video/mp4">
         Your browser does not support the video tag.
     </video>
 
     <div class="header">
         <div class="menu-icon" onclick="toggleDropdown()">☰</div>
-        <h1>MJ-FLIX LIVE TV</h1>
+        <h1>BDIX IPTV HUB</h1>
         <div class="clock" id="clock">00:00:00</div>
     </div>
 
     <div class="dropdown-menu" id="dropdown-menu">
-        <button onclick="window.open('https://wa.me/qr/PRGY5QFNEXEJJ1', '_blank')">WhatsApp</button>
+        <button onclick="window.open('https://wa.me/your-whatsapp-number', '_blank')">WhatsApp</button>
         <button onclick="window.open('https://t.me/your-telegram-link', '_blank')">Telegram</button>
         <!-- Add more buttons for other links -->
     </div>
@@ -168,9 +168,10 @@
     </div>
 
     <div class="footer">
-        Developed by ꧁༺🅨︎🅐︎🅝︎🅖︎🅧︎🅘︎🅐︎🅝︎🅖︎༻꧂
+        Developed by Your Name. Contact: your.email@example.com
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <script>
         async function fetchPlaylist(url) {
             try {
@@ -265,11 +266,21 @@
         }
 
         function playChannel(url) {
-            const videoSource = document.getElementById('video-source');
-            videoSource.src = url;
             const videoPlayer = document.getElementById('video-player');
-            videoPlayer.load();
-            videoPlayer.play();
+            const videoSource = document.getElementById('video-source');
+
+            if (Hls.isSupported()) {
+                const hls = new Hls();
+                hls.loadSource(url);
+                hls.attachMedia(videoPlayer);
+                hls.on(Hls.Events.MANIFEST_PARSED, function() {
+                    videoPlayer.play();
+                });
+            } else if (videoPlayer.canPlayType('application/vnd.apple.mpegurl')) {
+                videoSource.src = url;
+                videoPlayer.load();
+                videoPlayer.play();
+            }
         }
 
         function scrollToPlayer() {
@@ -296,10 +307,5 @@
         // Fetch playlist on page load
         fetchPlaylist('https://raw.githubusercontent.com/shahinkhan1003/TV/refs/heads/main/tv.m3u');
     </script>
-      <script async="async" data-cfasync="false" src="//pl25668544.profitablecpmrate.com/9836b306db829e2bea7ca60a527e5e79/invoke.js"></script>
-<div id="container-9836b306db829e2bea7ca60a527e5e79"></div><script type='text/javascript' src='//pl25668538.profitablecpmrate.com/19/5c/18/195c186416f0a12831ae2a4ee87763df.js'></script><script async="async" data-cfasync="false" src="//pl25668544.profitablecpmrate.com/9836b306db829e2bea7ca60a527e5e79/invoke.js"></script>
-<div id="container-9836b306db829e2bea7ca60a527e5e79"></div><script async="async" data-cfasync="false" src="//pl25668544.profitablecpmrate.com/9836b306db829e2bea7ca60a527e5e79/invoke.js"></script>
-<div id="container-9836b306db829e2bea7ca60a527e5e79"></div><script async="async" data-cfasync="false" src="//pl25668544.profitablecpmrate.com/9836b306db829e2bea7ca60a527e5e79/invoke.js"></script>
-<div id="container-9836b306db829e2bea7ca60a527e5e79"></div>
 </body>
 </html>
