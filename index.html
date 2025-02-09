@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IPTV Channel List</title>
+    <title>MJ-FLIX live tv</title>
     <style>
         body {
             background-color: #161616;
@@ -35,14 +35,6 @@
         .header h1 {
             margin: 0;
             font-size: 24px;
-        }
-        .clock {
-            position: absolute;
-            right: 10px;
-            background-color: #ff0000;
-            border-radius: 20px;
-            padding: 5px 10px;
-            font-size: 14px;
         }
         .menu-icon {
             position: absolute;
@@ -77,6 +69,39 @@
             border-radius: 5px;
             cursor: pointer;
             margin: 5px 0;
+        }
+        .video-player {
+            width: 100%;
+            max-width: 470px; /* Reduced width */
+            height: 300px; /* Reduced height */
+            background-color: #000;
+            margin: 20px auto;
+            z-index: 1;
+            position: relative;
+            border: 5px solid #ff0000;
+            border-radius: 15px; /* More rounded corners */
+            padding: 5px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5); /* Added shadow for a more elegant look */
+        }
+        .footer {
+            background-color: rgba(28, 28, 28, 0.8);
+            padding: 10px;
+            text-align: center;
+            color: #fff;
+            font-size: 14px;
+            position: relative;
+            z-index: 1;
+        }
+        .search-box {
+            width: 80%;
+            margin: 20px auto;
+            padding: 10px;
+            font-size: 16px;
+            background-color: #222;
+            color: #fff;
+            display: block;
+            border: none;
+            border-radius: 5px;
         }
         .channel-section {
             margin: 20px;
@@ -120,42 +145,36 @@
             margin-bottom: 5px;
             border-radius: 5px;
         }
-        .video-player {
-            width: 100%;
-            max-width: 800px;
-            height: 250px;
-            background-color: #000;
-            margin: 20px auto;
-            z-index: 1;
-            position: relative;
+        .footer-text {
+            font-size: 16px;
+            color: #ff0000;
+            font-weight: bold;
         }
-        .footer {
-            background-color: rgba(28, 28, 28, 0.8);
-            padding: 10px;
-            text-align: center;
+        .loading-message {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 20px;
             color: #fff;
-            font-size: 14px;
-            position: relative;
-            z-index: 1;
+            z-index: 2;
         }
     </style>
 </head>
 <body>
     <video autoplay muted loop class="background-video">
-        <source src="https://www.pexels.com/video/10452098/download/" type="video/mp4">
+        <source src="https://jmp.sh/s/W8PA44bz6sPNthEqClxe" type="video/mp4">
         Your browser does not support the video tag.
     </video>
 
     <div class="header">
         <div class="menu-icon" onclick="toggleDropdown()">☰</div>
-        <h1>BDIX IPTV HUB</h1>
-        <div class="clock" id="clock">00:00:00</div>
+        <h1>MJ-FLIX LIVE TV</h1>
     </div>
 
     <div class="dropdown-menu" id="dropdown-menu">
-        <button onclick="window.open('https://wa.me/your-whatsapp-number', '_blank')">WhatsApp</button>
+        <button onclick="window.open('https://wa.me/qr/PRGY5QFNEXEJJ1', '_blank')">WhatsApp</button>
         <button onclick="window.open('https://t.me/your-telegram-link', '_blank')">Telegram</button>
-        <!-- Add more buttons for other links -->
     </div>
 
     <video id="video-player" class="video-player" controls>
@@ -163,16 +182,21 @@
         Your browser does not support the video tag.
     </video>
 
+    <div class="search-box-wrapper">
+        <input type="text" id="search-box" class="search-box" placeholder="Search for channels..." oninput="filterChannels()">
+    </div>
+
     <div class="channel-section" id="channel-section">
         <!-- Channels will be loaded here -->
     </div>
 
     <div class="footer">
-        Developed by Your Name. Contact: your.email@example.com
+        <div class="footer-text">Developed by ꧁༺🅨︎🅐︎🅝︎🅖︎🅧︎🅘︎🅐︎🅝︎🅖︎༻꧂</div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <script>
+        let allChannels = [];  // Store all channels globally
+
         async function fetchPlaylist(url) {
             try {
                 const response = await fetch(url);
@@ -182,6 +206,7 @@
                 const data = await response.text();
                 console.log('Playlist data loaded successfully:', data);
                 const channels = parseM3U(data);
+                allChannels = channels;  // Save channels globally
                 renderChannels(channels);
             } catch (error) {
                 console.error('Error fetching playlist:', error);
@@ -266,21 +291,27 @@
         }
 
         function playChannel(url) {
-            const videoPlayer = document.getElementById('video-player');
             const videoSource = document.getElementById('video-source');
+            const videoPlayer = document.getElementById('video-player');
+            const loadingMessage = document.createElement('div');
+            loadingMessage.classList.add('loading-message');
+            loadingMessage.textContent = "Please wait, loading... (5 seconds)";
+            videoPlayer.appendChild(loadingMessage);
 
-            if (Hls.isSupported()) {
-                const hls = new Hls();
-                hls.loadSource(url);
-                hls.attachMedia(videoPlayer);
-                hls.on(Hls.Events.MANIFEST_PARSED, function() {
-                    videoPlayer.play();
-                });
-            } else if (videoPlayer.canPlayType('application/vnd.apple.mpegurl')) {
-                videoSource.src = url;
-                videoPlayer.load();
-                videoPlayer.play();
-            }
+            videoSource.src = url;
+            videoPlayer.load();
+            videoPlayer.play();
+
+            let timer = setTimeout(() => {
+                if (videoPlayer.readyState < 3) {
+                    loadingMessage.textContent = "Not working, try another.";
+                }
+            }, 5000); // 5 seconds timeout
+
+            videoPlayer.onloadeddata = () => {
+                clearTimeout(timer);
+                loadingMessage.style.display = 'none';
+            };
         }
 
         function scrollToPlayer() {
@@ -293,19 +324,16 @@
             dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
         }
 
-        function updateClock() {
-            const now = new Date();
-            const hours = String(now.getHours()).padStart(2, '0');
-            const minutes = String(now.getMinutes()).padStart(2, '0');
-            const seconds = String(now.getSeconds()).padStart(2, '0');
-            const currentTime = `${hours}:${minutes}:${seconds}`;
-            document.getElementById('clock').textContent = currentTime;
+        function filterChannels() {
+            const searchTerm = document.getElementById('search-box').value.toLowerCase();
+            const filteredChannels = allChannels.filter(channel => 
+                channel.name.toLowerCase().includes(searchTerm)
+            );
+            renderChannels(filteredChannels);
         }
 
-        setInterval(updateClock, 1000); // Update clock every second
-
         // Fetch playlist on page load
-        fetchPlaylist('https://raw.githubusercontent.com/shahinkhan1003/TV/refs/heads/main/tv.m3u');
+        fetchPlaylist('https://s1.sadman0.workers.dev/neonflix.m3u8');
     </script>
 </body>
 </html>
