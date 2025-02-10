@@ -72,16 +72,16 @@
         }
         .video-player {
             width: 100%;
-            max-width: 470px; /* Reduced width */
-            height: 300px; /* Reduced height */
+            max-width: 470px;
+            height: 380px;
             background-color: #000;
-            margin: 20px auto;
+            margin: 30px auto;
             z-index: 1;
             position: relative;
             border: 5px solid #ff0000;
-            border-radius: 15px; /* More rounded corners */
+            border-radius: 15px;
             padding: 5px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5); /* Added shadow for a more elegant look */
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
         }
         .footer {
             background-color: rgba(28, 28, 28, 0.8);
@@ -122,8 +122,11 @@
         .channel-list {
             display: flex;
             gap: 10px;
-            overflow-x: auto;
+            overflow-x: auto; /* Horizontal scrolling */
             padding-bottom: 10px;
+            padding-top: 10px;
+            scrollbar-width: thin;
+            scrollbar-color: #ff0000 #161616; /* Customize scrollbar */
         }
         .channel {
             background-color: #333;
@@ -138,6 +141,7 @@
             justify-content: center;
             font-size: 14px;
             cursor: pointer;
+            min-width: 120px;  /* Ensure consistent size */
         }
         .channel img {
             width: 60px;
@@ -163,24 +167,28 @@
 </head>
 <body>
     <video autoplay muted loop class="background-video">
-        <source src="https://jmp.sh/s/W8PA44bz6sPNthEqClxe" type="video/mp4">
+        <source src="https://i.gifer.com/445q.mp4" type="video/mp4">
         Your browser does not support the video tag.
     </video>
 
     <div class="header">
         <div class="menu-icon" onclick="toggleDropdown()">☰</div>
-        <h1>MJ-FLIX LIVE TV</h1>
+        <h1> 𝗠𝗝 𝐋𝐢𝐯𝐞ᵗᵛ</h1>
     </div>
 
     <div class="dropdown-menu" id="dropdown-menu">
         <button onclick="window.open('https://wa.me/qr/PRGY5QFNEXEJJ1', '_blank')">WhatsApp</button>
-        <button onclick="window.open('https://t.me/your-telegram-link', '_blank')">Telegram</button>
+        <button onclick="window.open('https://manikganjflix.blogspot.com', '_blank')">Website</button>
+
+<button onclick="window.open('https://apk.e-droid.net/apk/app3182293-zia19o.apk?v=12', '_blank')">Movie App</button>
+
     </div>
 
     <video id="video-player" class="video-player" controls>
         <source id="video-source" src="" type="application/x-mpegURL">
         Your browser does not support the video tag.
     </video>
+<marquee direction="left"> <h3> ভিডিও শুরু হতে কিছু সময় লাগতে পারে, ধৈর্য ধারণ করুন🤗🫰🏻</h3> </marquee>
 
     <div class="search-box-wrapper">
         <input type="text" id="search-box" class="search-box" placeholder="Search for channels..." oninput="filterChannels()">
@@ -298,16 +306,21 @@
             loadingMessage.textContent = "Please wait, loading... (5 seconds)";
             videoPlayer.appendChild(loadingMessage);
 
+            // Ensure the video source URL is properly set
             videoSource.src = url;
+
+            // Reload the player and start playing the video
             videoPlayer.load();
             videoPlayer.play();
 
+            // Handle timeout if the video is not working after 5 seconds
             let timer = setTimeout(() => {
                 if (videoPlayer.readyState < 3) {
                     loadingMessage.textContent = "Not working, try another.";
                 }
             }, 5000); // 5 seconds timeout
 
+            // Remove loading message once the video is loaded
             videoPlayer.onloadeddata = () => {
                 clearTimeout(timer);
                 loadingMessage.style.display = 'none';
@@ -333,7 +346,7 @@
         }
 
         // Fetch playlist on page load
-        fetchPlaylist('https://s1.sadman0.workers.dev/neonflix.m3u8');
-    </script>
+        fetchPlaylist('https://m3u.work/CTZz13nw')
+</script>
 </body>
 </html>
