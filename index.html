@@ -1,352 +1,221 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MJ-FLIX live tv</title>
-    <style>
-        body {
-            background-color: #161616;
-            color: #fff;
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            overflow-x: hidden;
-            position: relative;
-        }
-        .background-video {
-            position: fixed;
-            right: 0;
-            bottom: 0;
-            min-width: 100%;
-            min-height: 100%;
-            z-index: -1;
-            opacity: 0.5;
-        }
-        .header {
-            background-color: rgba(28, 28, 28, 0.8);
-            padding: 10px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            position: relative;
-            z-index: 2;
-        }
-        .header h1 {
-            margin: 0;
-            font-size: 24px;
-        }
-        .menu-icon {
-            position: absolute;
-            left: 10px;
-            background-color: #ff0000;
-            border-radius: 50%;
-            width: 30px;
-            height: 30px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            z-index: 2;
-        }
-        .dropdown-menu {
-            display: none;
-            position: absolute;
-            top: 40px;
-            left: 10px;
-            background-color: #2c2c2c;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.5);
-            border-radius: 8px;
-            width: 200px;
-            z-index: 3;
-        }
-        .dropdown-menu button {
-            width: 100%;
-            padding: 10px;
-            background-color: #ff0000;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            margin: 5px 0;
-        }
-        .video-player {
-            width: 100%;
-            max-width: 470px;
-            height: 380px;
-            background-color: #000;
-            margin: 30px auto;
-            z-index: 1;
-            position: relative;
-            border: 5px solid #ff0000;
-            border-radius: 15px;
-            padding: 5px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
-        }
-        .footer {
-            background-color: rgba(28, 28, 28, 0.8);
-            padding: 10px;
-            text-align: center;
-            color: #fff;
-            font-size: 14px;
-            position: relative;
-            z-index: 1;
-        }
-        .search-box {
-            width: 80%;
-            margin: 20px auto;
-            padding: 10px;
-            font-size: 16px;
-            background-color: #222;
-            color: #fff;
-            display: block;
-            border: none;
-            border-radius: 5px;
-        }
-        .channel-section {
-            margin: 20px;
-            z-index: 1;
-            position: relative;
-        }
-        .channel-category {
-            margin-bottom: 20px;
-            padding: 10px;
-            background-color: rgba(44, 44, 44, 0.8);
-            border-radius: 8px;
-        }
-        .channel-category h2 {
-            margin: 0 0 10px 0;
-            border-left: 4px solid #ff0000;
-            padding-left: 10px;
-        }
-        .channel-list {
-            display: flex;
-            gap: 10px;
-            overflow-x: auto; /* Horizontal scrolling */
-            padding-bottom: 10px;
-            padding-top: 10px;
-            scrollbar-width: thin;
-            scrollbar-color: #ff0000 #161616; /* Customize scrollbar */
-        }
-        .channel {
-            background-color: #333;
-            border-radius: 10px;
-            padding: 10px;
-            text-align: center;
-            width: 120px;
-            height: 120px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            font-size: 14px;
-            cursor: pointer;
-            min-width: 120px;  /* Ensure consistent size */
-        }
-        .channel img {
-            width: 60px;
-            height: 60px;
-            margin-bottom: 5px;
-            border-radius: 5px;
-        }
-        .footer-text {
-            font-size: 16px;
-            color: #ff0000;
-            font-weight: bold;
-        }
-        .loading-message {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 20px;
-            color: #fff;
-            z-index: 2;
-        }
-    </style>
-</head>
-<body>
-    <video autoplay muted loop class="background-video">
-        <source src="https://i.gifer.com/445q.mp4" type="video/mp4">
-        Your browser does not support the video tag.
-    </video>
 
-    <div class="header">
-        <div class="menu-icon" onclick="toggleDropdown()">☰</div>
-        <h1> 𝗠𝗝 𝐋𝐢𝐯𝐞ᵗᵛ</h1>
-    </div>
-
-    <div class="dropdown-menu" id="dropdown-menu">
-        <button onclick="window.open('https://wa.me/qr/PRGY5QFNEXEJJ1', '_blank')">WhatsApp</button>
-        <button onclick="window.open('https://manikganjflix.blogspot.com', '_blank')">Website</button>
-
-<button onclick="window.open('https://apk.e-droid.net/apk/app3182293-zia19o.apk?v=12', '_blank')">Movie App</button>
-
-    </div>
-
-    <video id="video-player" class="video-player" controls>
-        <source id="video-source" src="" type="application/x-mpegURL">
-        Your browser does not support the video tag.
-    </video>
-<marquee direction="left"> <h3> ভিডিও শুরু হতে কিছু সময় লাগতে পারে, ধৈর্য ধারণ করুন🤗🫰🏻</h3> </marquee>
-
-    <div class="search-box-wrapper">
-        <input type="text" id="search-box" class="search-box" placeholder="Search for channels..." oninput="filterChannels()">
-    </div>
-
-    <div class="channel-section" id="channel-section">
-        <!-- Channels will be loaded here -->
-    </div>
-
-    <div class="footer">
-        <div class="footer-text">Developed by ꧁༺🅨︎🅐︎🅝︎🅖︎🅧︎🅘︎🅐︎🅝︎🅖︎༻꧂</div>
-    </div>
-
-    <script>
-        let allChannels = [];  // Store all channels globally
-
-        async function fetchPlaylist(url) {
-            try {
-                const response = await fetch(url);
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                const data = await response.text();
-                console.log('Playlist data loaded successfully:', data);
-                const channels = parseM3U(data);
-                allChannels = channels;  // Save channels globally
-                renderChannels(channels);
-            } catch (error) {
-                console.error('Error fetching playlist:', error);
-            }
-        }
-
-        function parseM3U(data) {
-            const lines = data.split('\n');
-            const channels = [];
-            let currentChannel = {};
-            let currentCategory = 'Uncategorized';
-
-            lines.forEach(line => {
-                if (line.startsWith('#EXTINF')) {
-                    const nameMatch = line.match(/,(.+)$/);
-                    if (nameMatch) {
-                        currentChannel.name = nameMatch[1];
-                    }
-                    const categoryMatch = line.match(/group-title="([^"]+)"/);
-                    if (categoryMatch) {
-                        currentCategory = categoryMatch[1];
-                    }
-                    const logoMatch = line.match(/tvg-logo="([^"]+)"/);
-                    if (logoMatch) {
-                        currentChannel.logo = logoMatch[1];
-                    }
-                } else if (line && !line.startsWith('#')) {
-                    currentChannel.url = line;
-                    currentChannel.category = currentCategory;
-                    channels.push(currentChannel);
-                    currentChannel = {};
-                }
-            });
-
-            console.log('Parsed channels:', channels);
-            return channels;
-        }
-
-        function renderChannels(channels) {
-            const channelSection = document.getElementById('channel-section');
-            channelSection.innerHTML = '';
-
-            const grouped = groupByCategory(channels);
-
-            for (const category in grouped) {
-                const categoryDiv = document.createElement('div');
-                categoryDiv.className = 'channel-category';
-                categoryDiv.innerHTML = `<h2>${category}</h2>`;
-
-                const channelList = document.createElement('div');
-                channelList.className = 'channel-list';
-
-                grouped[category].forEach(channel => {
-                    const channelDiv = document.createElement('div');
-                    channelDiv.className = 'channel';
-                    channelDiv.innerHTML = `
-                        <img src="${channel.logo || 'default-logo.png'}" alt="${channel.name} Logo">
-                        <div>${channel.name}</div>
-                    `;
-                    channelDiv.onclick = () => {
-                        playChannel(channel.url);
-                        scrollToPlayer();
-                    };
-                    channelList.appendChild(channelDiv);
-                });
-
-                categoryDiv.appendChild(channelList);
-                channelSection.appendChild(categoryDiv);
-            }
-        }
-
-        function groupByCategory(channels) {
-            const categories = {};
-            channels.forEach(channel => {
-                const category = channel.category || 'Uncategorized';
-                if (!categories[category]) {
-                    categories[category] = [];
-                }
-                categories[category].push(channel);
-            });
-            return categories;
-        }
-
-        function playChannel(url) {
-            const videoSource = document.getElementById('video-source');
-            const videoPlayer = document.getElementById('video-player');
-            const loadingMessage = document.createElement('div');
-            loadingMessage.classList.add('loading-message');
-            loadingMessage.textContent = "Please wait, loading... (5 seconds)";
-            videoPlayer.appendChild(loadingMessage);
-
-            // Ensure the video source URL is properly set
-            videoSource.src = url;
-
-            // Reload the player and start playing the video
-            videoPlayer.load();
-            videoPlayer.play();
-
-            // Handle timeout if the video is not working after 5 seconds
-            let timer = setTimeout(() => {
-                if (videoPlayer.readyState < 3) {
-                    loadingMessage.textContent = "Not working, try another.";
-                }
-            }, 5000); // 5 seconds timeout
-
-            // Remove loading message once the video is loaded
-            videoPlayer.onloadeddata = () => {
-                clearTimeout(timer);
-                loadingMessage.style.display = 'none';
-            };
-        }
-
-        function scrollToPlayer() {
-            const videoPlayer = document.getElementById('video-player');
-            videoPlayer.scrollIntoView({ behavior: 'smooth' });
-        }
-
-        function toggleDropdown() {
-            const dropdownMenu = document.getElementById('dropdown-menu');
-            dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
-        }
-
-        function filterChannels() {
-            const searchTerm = document.getElementById('search-box').value.toLowerCase();
-            const filteredChannels = allChannels.filter(channel => 
-                channel.name.toLowerCase().includes(searchTerm)
-            );
-            renderChannels(filteredChannels);
-        }
-
-        // Fetch playlist on page load
-        fetchPlaylist('https://m3u.work/RD9P6YPl.m3u')
-</script>
-</body>
-</html>
+#EXTM3U
+#EXTINF:-1, T Sports HD
+#EXTIMG:http://example.com/logo_tsports.png
+https://cdn.hoichoi24.com/TSportsHD/video.m3u8
+#EXTINF:-1, Sky Sports Golf
+#EXTIMG:http://example.com/logo_skysportsgolf.png
+https://cdn.hoichoi24.com/SkySportsGolf/video.m3u8
+#EXTINF:-1, Super La Liga HD
+#EXTIMG:http://example.com/logo_superlaliga.png
+https://cdn.hoichoi24.com/SuperLaLigaHD/video.m3u8
+#EXTINF:-1, Sky Sports Cricket HD
+#EXTIMG:http://example.com/logo_skysportscricket.png
+https://cdn.hoichoi24.com/SkySportsCricketHD/video.m3u8
+#EXTINF:-1, Super Premier League A HD
+#EXTIMG:http://example.com/logo_superpremierleague.png
+https://cdn.hoichoi24.com/SuperPremierLeagueAHD/video.m3u8
+#EXTINF:-1, Nick TV HD Plus
+#EXTIMG:http://example.com/logo_nicktv.png
+https://cdn.hoichoi24.com/NickTVHDPlus/video.m3u8
+#EXTINF:-1, Discovery Kids
+#EXTIMG:http://example.com/logo_discoverykids.png
+https://cdn.hoichoi24.com/DiscoveryKids/video.m3u8
+#EXTINF:-1, Pogo
+#EXTIMG:http://example.com/logo_pogo.png
+https://cdn.hoichoi24.com/Pogo/video.m3u8
+#EXTINF:-1, Discovery HD
+#EXTIMG:http://example.com/logo_discoveryhd.png
+https://cdn.hoichoi24.com/DiscoveryHD/video.m3u8
+#EXTINF:-1, And Picture TV
+#EXTIMG:http://example.com/logo_andpicture.png
+https://cdn.hoichoi24.com/AndPictureTV/video.m3u8
+#EXTINF:-1, And Prive HD
+#EXTIMG:http://example.com/logo_andprive.png
+https://cdn.hoichoi24.com/AndPriveHD/video.m3u8
+#EXTINF:-1, ARY Digital
+#EXTIMG:http://example.com/logo_arydigital.png
+https://cdn.hoichoi24.com/ARYDigital/video.m3u8
+#EXTINF:-1, Star Life HD
+#EXTIMG:http://example.com/logo_starlife.png
+https://cdn.hoichoi24.com/StarLifeHD/video.m3u8
+#EXTINF:-1, And Flix HD
+#EXTIMG:http://example.com/logo_andflix.png
+https://cdn.hoichoi24.com/AndFlixHD/video.m3u8
+#EXTINF:-1, Sony Pix HD
+#EXTIMG:http://example.com/logo_sonypix.png
+https://cdn.hoichoi24.com/SonyPixHD/video.m3u8
+#EXTINF:-1, AXN HD
+#EXTIMG:http://example.com/logo_axn.png
+https://cdn.hoichoi24.com/AXNHD/video.m3u8
+#EXTINF:-1, Star Movies HD
+#EXTIMG:http://example.com/logo_starmovies.png
+https://cdn.hoichoi24.com/StarMoviesHD/video.m3u8
+#EXTINF:-1, Mastii
+#EXTIMG:http://example.com/logo_mastii.png
+https://cdn.hoichoi24.com/Mastii/video.m3u8
+#EXTINF:-1, 9XM
+#EXTIMG:http://example.com/logo_9xm.png
+https://cdn.hoichoi24.com/9XM/video.m3u8
+#EXTINF:-1, Colors Bangla HD
+#EXTIMG:http://example.com/logo_colorsbangla.png
+https://cdn.hoichoi24.com/colorsbanglahd/video.m3u8
+#EXTINF:-1, SB Bharat HD
+#EXTIMG:http://example.com/logo_sbbharat.png
+https://cdn.hoichoi24.com/sbharathd/video.m3u8
+#EXTINF:-1, Sony Max HD
+#EXTIMG:http://example.com/logo_sonymax.png
+https://cdn.hoichoi24.com/sonymaxhd/video.m3u8
+#EXTINF:-1, MTV India
+#EXTIMG:http://example.com/logo_mtvindia.png
+https://cdn.hoichoi24.com/mtvindia/video.m3u8
+#EXTINF:-1, Sony HD
+#EXTIMG:http://example.com/logo_sonyhd.png
+https://cdn.hoichoi24.com/sonyhd/video.m3u8
+#EXTINF:-1, T Sports F HD
+#EXTIMG:http://example.com/logo_tsportsf.png
+https://cdn.hoichoi24.com/tsportsfhd/video.m3u8
+#EXTINF:-1, S Prime
+#EXTIMG:http://example.com/logo_sprime.png
+https://cdn.hoichoi24.com/sprime/video.m3u8
+#EXTINF:-1, Sony Ten 1 HD
+#EXTIMG:http://example.com/logo_sonyten1.png
+https://cdn.hoichoi24.com/sonyten1hd/video.m3u8
+#EXTINF:-1, Sony Ten 3 HD
+#EXTIMG:http://example.com/logo_sonyten3.png
+https://cdn.hoichoi24.com/sonyten3hd/video.m3u8
+#EXTINF:-1, Sky Sports Golf
+#EXTIMG:http://example.com/logo_skysportsgolf.png
+https://cdn.hoichoi24.com/skysportsgolf/video.m3u8
+#EXTINF:-1, Sports 18 HD
+#EXTIMG:http://example.com/logo_sports18.png
+https://cdn.hoichoi24.com/sports18hd/video.m3u8
+#EXTINF:-1, BeIN Sports 3
+#EXTIMG:http://example.com/logo_beinsports3.png
+https://cdn.hoichoi24.com/beinsports3/video.m3u8
+#EXTINF:-1, TNT Sports 2 HD
+#EXTIMG:http://example.com/logo_tntsports2.png
+https://cdn.hoichoi24.com/tntsports2hd/video.m3u8
+#EXTINF:-1, Super Cricket 1 HD
+#EXTIMG:http://example.com/logo_supercricket1.png
+https://cdn.hoichoi24.com/supercricket1hd/video.m3u8
+#EXTINF:-1, T Sports HD L
+#EXTIMG:http://example.com/logo_tsportsl.png
+https://cdn.hoichoi24.com/tsportshdL/video.m3u8
+#EXTINF:-1, A Sports E
+#EXTIMG:http://example.com/logo_asports.png
+https://cdn.hoichoi24.com/asportse/video.m3u8
+#EXTINF:-1, Cartoon Network
+#EXTIMG:http://example.com/logo_cartoonnetwork.png
+https://cdn.hoichoi24.com/cartoonnetwork/video.m3u8
+#EXTINF:-1, Nat Geo HD
+#EXTIMG:http://example.com/logo_natgeo.png
+https://cdn.hoichoi24.com/NatGeoHD/video.m3u8
+#EXTINF:-1, Colors Infinity HD
+#EXTIMG:http://example.com/logo_colorsinfinity.png
+https://cdn.hoichoi24.com/ColorsInfinityHD/video.m3u8
+#EXTINF:-1, LIVE
+#EXTIMG:http://example.com/logo_live.png
+https://cdn.hoichoi24.com/LIVE/video.m3u8
+#EXTINF:-1, Hoichoi24.com T Sports
+#EXTIMG:http://example.com/logo_hoichoi24_tsports.png
+https://cdn.hoichoi24.com/hoichoi24.com-T-sports/video.m3u8
+#EXTINF:-1, Hoichoi24.com Gazi-TV
+#EXTIMG:http://example.com/logo_hoichoi24_gazi.png
+https://cdn.hoichoi24.com/hoichoi24.com-Gazi-TV/video.m3u8
+#EXTINF:-1, Nagorik-TV Hoichoi24.com
+#EXTIMG:http://example.com/logo_nagorik.png
+https://cdn.hoichoi24.com/Nagorik-TV-Hoichoi24.com/video.m3u8
+#EXTINF:-1, SP-LIVE SPORTS Hoichoi24.com
+#EXTIMG:http://example.com/logo_splive.png
+https://cdn.hoichoi24.com/SP-LIVE-SPORTS-hoichoi24.com/video.m3u8
+#EXTINF:-1, SP-T SPORTS Hoichoi24.com
+#EXTIMG:http://example.com/logo_spt.png
+https://cdn.hoichoi24.com/SP-T-SPORTS-hoichoi24.com/video.m3u8
+#EXTINF:-1, SP-GTV Hoichoi24.com
+#EXTIMG:http://example.com/logo_spgtv.png
+https://cdn.hoichoi24.com/SP-GTV-hoichoi24.com/video.m3u8
+#EXTINF:-1, SP-STAR SPORTS 1 Hoichoi24.com
+#EXTIMG:http://example.com/logo_spstar1.png
+https://cdn.hoichoi24.com/SP-STAR-SPORTS-1-hoichoi24.com/video.m3u8
+#EXTINF:-1, SP-STAR SPORTS 2 Hoichoi24.com
+#EXTIMG:http://example.com/logo_spstar2.png
+https://cdn.hoichoi24.com/SP-STAR-SPORTS-2-hoichoi24.com/video.m3u8
+#EXTINF:-1, SP-SONY TEN 1 Hoichoi24.com
+#EXTIMG:http://example.com/logo_sonyten1.png
+https://cdn.hoichoi24.com/SP-SONY-TEN-1-hoichoi24.com/video.m3u8
+#EXTINF:-1, SP-SONY TEN 2 Hoichoi24.com
+#EXTIMG:http://example.com/logo_sonyten2.png
+https://cdn.hoichoi24.com/SP-SONY-TEN-2-hoichoi24.com/video.m3u8
+#EXTINF:-1, SP-SONY TEN 3 Hoichoi24.com
+#EXTIMG:http://example.com/logo_sonyten3.png
+https://cdn.hoichoi24.com/SP-SONY-TEN-3-hoichoi24.com/video.m3u8
+#EXTINF:-1, SP-SPL 1 Hoichoi24.com
+#EXTIMG:http://example.com/logo_spspl1.png
+https://cdn.hoichoi24.com/SP-SPL-1-hoichoi24.com/video.m3u8
+#EXTINF:-1, SP-SPL 2 Hoichoi24.com
+#EXTIMG:http://example.com/logo_spspl2.png
+https://cdn.hoichoi24.com/SP-SPL-2-hoichoi24.com/video.m3u8
+#EXTINF:-1, SP-sports 18 Hoichoi24.com
+#EXTIMG:http://example.com/logo_sports18.png
+https://cdn.hoichoi24.com/SP-sports-18-hoichoi24.com/video.m3u8
+#EXTINF:-1, BD-INDEPENDENT TV Hoichoi24.com
+#EXTIMG:http://example.com/logo_bdin.png
+https://cdn.hoichoi24.com/BD-INDEPENDENT-TV-hoichoi24.com/video.m3u8
+#EXTINF:-1, BD-ATN BANGLA Hoichoi24.com
+#EXTIMG:http://example.com/logo_atnbangla.png
+https://cdn.hoichoi24.com/BD-ATN-BANGLA-hoichoi24.com/video.m3u8
+#EXTINF:-1, BD-ATN NEWS Hoichoi24.com
+#EXTIMG:http://example.com/logo_atnnews.png
+https://cdn.hoichoi24.com/BD-ATN-NEWS-hoichoi24.com/video.m3u8
+#EXTINF:-1, BD-DBC NEWS Hoichoi24.com
+#EXTIMG:http://example.com/logo_dbcnews.png
+https://cdn.hoichoi24.com/BD-DBC-NEWS-hoichoi24.com/video.m3u8
+#EXTINF:-1, BD-MASRANGA TV Hoichoi24.com
+#EXTIMG:http://example.com/logo_masranga.png
+https://cdn.hoichoi24.com/BD-MASRANGA-TV-hoichoi24.com/video.m3u8
+#EXTINF:-1, BD-channel i Hoichoi24.com
+#EXTIMG:http://example.com/logo_channeli.png
+https://cdn.hoichoi24.com/BD-channel-i-hoichoi24.com/video.m3u8
+#EXTINF:-1, BD-RTV Hoichoi24.com
+#EXTIMG:http://example.com/logo_rtv.png
+https://cdn.hoichoi24.com/BD-RTV-hoichoi24.com/video.m3u8
+#EXTINF:-1, INBD-ZEE BANGLA Hoichoi24.com
+#EXTIMG:http://example.com/logo_zeebangla.png
+https://cdn.hoichoi24.com/INBD-ZEE-BANGLA-hoichoi24.com/video.m3u8
+#EXTINF:-1, INBD-STAR JALSHA Hoichoi24.com
+#EXTIMG:http://example.com/logo_starjalsha.png
+https://cdn.hoichoi24.com/INBD-STAR-JALSHA-hoichoi24.com/video.m3u8
+#EXTINF:-1, INBD-JALSHA MOVIES Hoichoi24.com
+#EXTIMG:http://example.com/logo_jalshamovies.png
+https://cdn.hoichoi24.com/INBD-JALSHA-MOVIES-hoichoi24.com/video.m3u8
+#EXTINF:-1, INBD-COLORS BANGLA Hoichoi24.com
+#EXTIMG:http://example.com/logo_colorsbangla.png
+https://cdn.hoichoi24.com/INBD-COLORS-BANGLA-hoichoi24.com/video.m3u8
+#EXTINF:-1, INBD-SONY ART Hoichoi24.com
+#EXTIMG:http://example.com/logo_sonyart.png
+https://cdn.hoichoi24.com/INBD-SONY-ART-hoichoi24.com/video.m3u8
+#EXTINF:-1, IN-STAR PLUS Hoichoi24.com
+#EXTIMG:http://example.com/logo_starplus.png
+https://cdn.hoichoi24.com/IN-STAR-PLUS-hoichoi24.com/video.m3u8
+#EXTINF:-1, IN-STAR GOLD Hoichoi24.com
+#EXTIMG:http://example.com/logo_stargold.png
+https://cdn.hoichoi24.com/IN-STAR-GOLD-hoichoi24.com/video.m3u8
+#EXTINF:-1, IN-SONY ENT Hoichoi24.com
+#EXTIMG:http://example.com/logo_sonyent.png
+https://cdn.hoichoi24.com/IN-SONY-ENT-hoichoi24.com/video.m3u8
+#EXTINF:-1, IN-COLORS HIN Hoichoi24.com
+#EXTIMG:http://example.com/logo_colorshin.png
+https://cdn.hoichoi24.com/IN-COLORS-HIN-hoichoi24.com/video.m3u8
+#EXTINF:-1, IN-ZEE CINEMA Hoichoi24.com
+#EXTIMG:http://example.com/logo_zeecinema.png
+https://cdn.hoichoi24.com/IN-ZEE-CINEMA-hoichoi24.com/video.m3u8
+#EXTINF:-1, EN-STAR MOVIE Hoichoi24.com
+#EXTIMG:http://example.com/logo_enstarmovie.png
+https://cdn.hoichoi24.com/EN-STAR-MOVIE-hoichoi24.com/video.m3u8
+#EXTINF:-1, EN-SONY PIX Hoichoi24.com
+#EXTIMG:http://example.com/logo_en sonypix.png
+https://cdn.hoichoi24.com/EN-SONY-PIX-hoichoi24.com/video.m3u8
+#EXTINF:-1, DOC-DISCOVERY Hoichoi24.com
+#EXTIMG:http://example.com/logo_docdiscovery.png
+https://cdn.hoichoi24.com/DOC-DISCOVERY-hoichoi24.com/video.m3u8
