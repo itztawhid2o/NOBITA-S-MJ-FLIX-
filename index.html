@@ -3,8 +3,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MJ Live Sports</title>
-    <!-- Plyr CSS -->
     <link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css" />
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -13,7 +13,6 @@
             margin: 0;
             overflow: hidden;
             position: relative;
-            background: black;
         }
         h1, h2 {
             color: inherit;
@@ -23,7 +22,6 @@
             max-width: 800px;
             margin: auto;
             margin-bottom: 20px;
-            position: relative;
             z-index: 1;
         }
         #channelList {
@@ -31,8 +29,8 @@
             grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
             gap: 10px;
             padding: 10px;
-            max-height: 400px;
             overflow-y: auto;
+            max-height: 400px;
             margin: 0 auto;
             width: 90%;
             max-width: 800px;
@@ -49,37 +47,29 @@
             height: 60px;
             object-fit: contain;
             border-radius: 5px;
-            background: #ddd;
+        }
+        .channel h3 {
+            font-size: 12px;
+            margin: 10px 0 0;
+            color: #333;
         }
     </style>
 </head>
-<body><h1>MJ Live Sports</h1><div id="playerContainer">
-    <video id="player" controls></video>
-</div><h2>সব চ্যানেল</h2>
-<div id="channelList"></div><!-- Plyr & HLS.js --><script src="https://cdn.plyr.io/3.7.8/plyr.js"></script><script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script><script>
-    const player = new Plyr('#player', {
-        controls: ['play', 'progress', 'current-time', 'mute', 'volume', 'fullscreen'],
-    });
-
-    function playChannel(url) {
-        const video = document.getElementById('player');
-        if (Hls.isSupported()) {
-            const hls = new Hls();
-            hls.loadSource(url);
-            hls.attachMedia(video);
-            hls.on(Hls.Events.MANIFEST_PARSED, function() {
-                player.play();
-            });
-        } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-            video.src = url;
-            video.play();
-        }
-    }
-
-    async function loadM3U() {
-        const m3uUrl = "https://m3u.work/CTZz13nw";
+<body>
+    <h1>MJ Live Sports</h1>
+    <input type="text" id="searchBox" placeholder="চ্যানেলের নাম লিখুন..." onkeyup="searchChannel()">
+    <div id="playerContainer">
+        <video id="player" controls></video>
+    </div>
+    <h2>সব চ্যানেল</h2>
+    <div id="channelList"></div>
+    <script src="https://cdn.plyr.io/3.7.8/plyr.js"></script>
+    <script>
+        const player = new Plyr('#player');
+        const m3uUrl = "https://m3u.work/CTZz13nw";async function loadM3U() {
         try {
             const response = await fetch(m3uUrl);
+            if (!response.ok) throw new Error("Failed to fetch M3U playlist");
             const text = await response.text();
             const lines = text.split("\n");
             let channels = [];
@@ -88,6 +78,7 @@
                     const nameMatch = lines[i].match(/,(.+)/);
                     const logoMatch = lines[i].match(/tvg-logo="(.+?)"/);
                     let name = nameMatch ? nameMatch[1] : "Unknown";
+                    name = name.replace(/\s*-\s*[^-]+$/, "").trim();
                     const logo = logoMatch ? logoMatch[1] : "https://via.placeholder.com/150";
                     const url = lines[i + 1] ? lines[i + 1].trim() : "";
                     if (url.startsWith("http")) {
@@ -98,6 +89,7 @@
             displayChannels(channels);
         } catch (error) {
             console.error("Error loading M3U:", error);
+            alert("Failed to load channels. Please try again later.");
         }
     }
 
@@ -111,8 +103,35 @@
             div.onclick = () => playChannel(channel.url);
             list.appendChild(div);
         });
+        if (channels.length > 0) {
+            playChannel(channels[0].url);
+        }
+    }
+
+    function playChannel(url) {
+        const video = document.querySelector("#player");
+        if (Hls.isSupported()) {
+            const hls = new Hls();
+            hls.loadSource(url);
+            hls.attachMedia(video);
+        } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+            video.src = url;
+        }
+        player.play();
+        document.getElementById("playerContainer").scrollIntoView({ behavior: "smooth" });
+    }
+
+    function searchChannel() {
+        const query = document.getElementById("searchBox").value.toLowerCase().trim();
+        const channels = document.querySelectorAll(".channel");
+        channels.forEach(channel => {
+            const name = channel.querySelector("h3").innerText.toLowerCase();
+            channel.style.display = name.includes(query) ? "block" : "none";
+        });
     }
 
     window.onload = loadM3U;
-</script></body>
+</script>
+
+</body>
 </html>
