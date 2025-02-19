@@ -3,8 +3,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MJ Live Sports</title>
-    <!-- Clapper.js CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@clappr/player/dist/clappr.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@clappr/player@latest/dist/clappr.min.css">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -13,11 +12,8 @@
             margin: 0;
             overflow: hidden;
             position: relative;
-            background: #000;
         }
-        h1, h2 {
-            color: inherit;
-        }
+        h1, h2 { color: inherit; }
         #backgroundVideo {
             position: fixed;
             top: 0;
@@ -38,21 +34,18 @@
             border: 1px solid #ccc;
             border-radius: 5px;
             display: block;
-            z-index: 1;
         }
         #playerContainer {
             width: 90%;
             max-width: 800px;
             margin: auto;
             margin-bottom: 20px;
-            z-index: 1;
         }
         #channelList {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
             gap: 10px;
             padding: 10px;
-            z-index: 1;
             overflow-y: auto;
             max-height: 400px;
             margin: 0 auto;
@@ -62,51 +55,43 @@
         .channel {
             background: rgba(255, 255, 255, 0.9);
             padding: 10px;
-            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
             border-radius: 10px;
             cursor: pointer;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             text-align: center;
         }
-        .channel:hover {
-            transform: scale(1.05);
-            box-shadow: 4px 4px 20px rgba(0, 0, 0, 0.2);
-        }
+        .channel:hover { transform: scale(1.05); }
         .channel img {
             width: 100%;
             height: 60px;
             object-fit: contain;
             border-radius: 5px;
-            background: #ddd;
         }
-        .channel h3 {
-            font-size: 12px;
-            margin: 10px 0 0;
-            color: #333;
-        }
+        .channel h3 { font-size: 12px; margin: 10px 0 0; color: #333; }
     </style>
 </head>
-<body><!-- Background Video --><video id="backgroundVideo" autoplay muted loop>
-    <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
-    Your browser does not support the video tag.
-</video><h1>MJ Live Sports</h1><div id="playerContainer">
-    <div id="player"></div>
-</div><input type="text" id="searchBox" placeholder="চ্যানেলের নাম লিখুন..." onkeyup="searchChannel()"><h2>সব চ্যানেল</h2><div id="channelList"></div><!-- Clapper.js --><script src="https://cdn.jsdelivr.net/npm/@clappr/player/dist/clappr.min.js"></script><script>
-    const m3uUrl = "https://m3u.work/CTZz13nw";
-    let player;
-
-    function initializePlayer(url) {
-        if (player) player.destroy();
-        player = new Clappr.Player({
-            source: url,
+<body>
+    <video id="backgroundVideo" autoplay muted loop>
+        <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
+    </video>
+    <h1>MJ Live Sports</h1>
+    <div id="playerContainer">
+        <div id="player"></div>
+    </div>
+    <input type="text" id="searchBox" placeholder="চ্যানেলের নাম লিখুন..." onkeyup="searchChannel()">
+    <h2>সব চ্যানেল</h2>
+    <div id="channelList"></div>
+    <script src="https://cdn.jsdelivr.net/npm/@clappr/player@latest/dist/clappr.min.js"></script>
+    <script>
+        const player = new Clappr.Player({
+            source: "",
             parentId: "#player",
             autoPlay: true,
-            mute: false,
-            loop: false,
+            mediacontrol: { seekbar: "blue", buttons: "white" },
+            plugins: [Clappr.FlasHLS],
+            height: "400px",
             width: "100%",
-            height: "100%",
-        });
-    }
+        });const m3uUrl = "https://m3u.work/CTZz13nw";
 
     async function loadM3U() {
         try {
@@ -142,12 +127,17 @@
             const div = document.createElement("div");
             div.classList.add("channel");
             div.innerHTML = `<img src="${channel.logo}" alt="${channel.name}"><h3>${channel.name}</h3>`;
-            div.onclick = () => initializePlayer(channel.url);
+            div.onclick = () => playChannel(channel.url);
             list.appendChild(div);
         });
         if (channels.length > 0) {
-            initializePlayer(channels[0].url);
+            playChannel(channels[0].url);
         }
+    }
+
+    function playChannel(url) {
+        player.load(url);
+        document.getElementById("playerContainer").scrollIntoView({ behavior: "smooth" });
     }
 
     function searchChannel() {
@@ -160,5 +150,7 @@
     }
 
     window.onload = loadM3U;
-</script></body>
+</script>
+
+</body>
 </html>
