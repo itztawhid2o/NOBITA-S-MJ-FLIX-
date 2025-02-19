@@ -1,137 +1,449 @@
-<!DOCTYPE html><html lang="bn">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!DOCTYPE html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MJ Live Sports</title>
-    <link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css" />
-    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <title>𝗠𝗝 𝐋𝐢𝐯𝐞ᵗᵛ</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             text-align: center;
-            color: #fff;
-            margin: 0;
-            overflow: hidden;
-            position: relative;
+            margin-top: 50px;
         }
-        h1, h2 {
-            color: inherit;
-        }
-        #playerContainer {
-            width: 90%;
-            max-width: 800px;
-            margin: auto;
-            margin-bottom: 20px;
-            z-index: 1;
-        }
-        #channelList {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-            gap: 10px;
-            padding: 10px;
-            overflow-y: auto;
-            max-height: 400px;
-            margin: 0 auto;
-            width: 90%;
-            max-width: 800px;
-        }
-        .channel {
-            background: rgba(255, 255, 255, 0.9);
-            padding: 10px;
-            border-radius: 10px;
+        .share-btn {
+            background-color: #007bff;
+            color: white;
+            padding: 0px 0px;
+            border: none;
             cursor: pointer;
-            text-align: center;
+            font-size: 10px;
+            border-radius: 0px;
         }
-        .channel img {
-            width: 100%;
-            height: 60px;
-            object-fit: contain;
-            border-radius: 5px;
+        .share-options {
+            display: none;
+            margin-top: 10px;
         }
-        .channel h3 {
-            font-size: 12px;
-            margin: 10px 0 0;
+        .share-options a {
+            display: block;
+            margin: 5px 0;
+            text-decoration: none;
             color: #333;
+            padding: 0px;
+            border-radius: 20px;
+            background-color: #f1f1f1;
         }
     </style>
 </head>
 <body>
-    <h1>MJ Live Sports</h1>
-    <input type="text" id="searchBox" placeholder="চ্যানেলের নাম লিখুন..." onkeyup="searchChannel()">
-    <div id="playerContainer">
-        <video id="player" controls></video>
+
+    <button class="share-btn" onclick="toggleShareOptions()">🔗 আপনার বন্ধুদের কাছে পাঠিয়ে দিন</button>
+
+    <div class="share-options" id="shareOptions">
+        <a href="#" onclick="shareLink('whatsapp')">📱 WhatsApp</a>
+        <a href="#" onclick="shareLink('facebook')">📘 Facebook</a>
+        <a href="#" onclick="shareLink('messenger')">💬 Messenger</a>
+        <a href="#" onclick="shareLink('twitter')">🐦 Twitter</a>
+        <a href="#" onclick="shareLink('telegram')">✈️ Telegram</a>
+        <a href="#" onclick="shareLink('email')">📧 Email</a>
+        <a href="#" onclick="shareLink('copy')">📋 Copy Link</a>
     </div>
-    <h2>সব চ্যানেল</h2>
-    <div id="channelList"></div>
-    <script src="https://cdn.plyr.io/3.7.8/plyr.js"></script>
+
     <script>
-        const player = new Plyr('#player');
-        const m3uUrl = "https://m3u.work/CTZz13nw";async function loadM3U() {
-        try {
-            const response = await fetch(m3uUrl);
-            if (!response.ok) throw new Error("Failed to fetch M3U playlist");
-            const text = await response.text();
-            const lines = text.split("\n");
-            let channels = [];
-            for (let i = 0; i < lines.length; i++) {
-                if (lines[i].startsWith("#EXTINF")) {
-                    const nameMatch = lines[i].match(/,(.+)/);
-                    const logoMatch = lines[i].match(/tvg-logo="(.+?)"/);
-                    let name = nameMatch ? nameMatch[1] : "Unknown";
-                    name = name.replace(/\s*-\s*[^-]+$/, "").trim();
-                    const logo = logoMatch ? logoMatch[1] : "https://via.placeholder.com/150";
-                    const url = lines[i + 1] ? lines[i + 1].trim() : "";
-                    if (url.startsWith("http")) {
-                        channels.push({ name, logo, url });
-                    }
-                }
+        function toggleShareOptions() {
+            var options = document.getElementById("shareOptions");
+            options.style.display = options.style.display === "block" ? "none" : "block";
+        }
+
+        function shareLink(platform) {
+            var link = " 𝗠𝗝 𝐋𝐈𝐕𝐄ᵗᵛ – আপনার বিনোদনের সেরা ঠিকানা!
+
+✅ ২০০+ লাইভ টিভি চ্যানেল – এক ক্লিকে সব চ্যানেল!
+
+✅ ২৪/৭ সাপোর্ট – আপনার সমস্যা, আমাদের সমাধান!
+
+✅ আপনার পছন্দের চ্যানেল যোগ করুন – আপনার প্রয়োজনীয় চ্যানেল এডমিনকে জানান, তিনি যোগ করে দেবেন!
+
+এখনই আমাদের অ্যাপটি ডাউনলোড করুন এবং উপভোগ করুন আনলিমিটেড লাইভ টিভি!
+
+🔗 ডাউনলোড লিংক:  https://manikganjflix.blogspot.com/2025/02/haruto-live.html
+
+📡 যেখানেই থাকুন, MJ LIVE TV-এর সাথে থাকুন!;  // এখানে তোমার শেয়ার করা লিংক দাও
+            var encodedLink = encodeURIComponent(link);
+            var shareUrl = "";
+
+            if (platform === "whatsapp") {
+                shareUrl = "https://api.whatsapp.com/send?text=" + encodedLink;
+            } else if (platform === "facebook") {
+                shareUrl = "https://www.facebook.com/sharer/sharer.php?u=" + encodedLink;
+            } else if (platform === "messenger") {
+                shareUrl = "fb-messenger://share?link=" + encodedLink;
+            } else if (platform === "twitter") {
+                shareUrl = "https://twitter.com/intent/tweet?url=" + encodedLink;
+            } else if (platform === "telegram") {
+                shareUrl = "https://t.me/share/url?url=" + encodedLink;
+            } else if (platform === "email") {
+                shareUrl = "mailto:?subject=Check this out&body=" + encodedLink;
+            } else if (platform === "copy") {
+                navigator.clipboard.writeText(link).then(() => {
+                    alert("লিংক কপি করা হয়েছে!");
+                });
+                return;
             }
-            displayChannels(channels);
-        } catch (error) {
-            console.error("Error loading M3U:", error);
-            alert("Failed to load channels. Please try again later.");
-        }
-    }
 
-    function displayChannels(channels) {
-        const list = document.getElementById("channelList");
-        list.innerHTML = "";
-        channels.forEach(channel => {
-            const div = document.createElement("div");
-            div.classList.add("channel");
-            div.innerHTML = `<img src="${channel.logo}" alt="${channel.name}"><h3>${channel.name}</h3>`;
-            div.onclick = () => playChannel(channel.url);
-            list.appendChild(div);
+            window.open(shareUrl, "_blank");
+        }
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>𝗠𝗝 𝐋𝐢𝐯𝐞ᵗᵛ</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/video.js/dist/video-js.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/video.js/dist/video.min.js"></script>
+    <style>
+        body {
+            background-color: #161616;
+            color: #fff;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            position: relative;
+        }
+        .background-video {
+            position: fixed;
+            right: 0;
+            bottom: 0;
+            min-width: 100%;
+            min-height: 100%;
+            z-index: -1;
+            opacity: 0.5;
+        }
+        .header {
+            background-color: rgba(28, 28, 28, 0.8);
+            padding: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 30px;
+        }
+        .menu-icon {
+            position: absolute;
+            left: 10px;
+            background-color: #ff0000;
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 4;
+        }
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 80px;
+            left: 10px;
+            background-color: #2c2c2c;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+            border-radius: 8px;
+            width: 200px;
+            z-index: 3;
+        }
+        .dropdown-menu button {
+            width: 100%;
+            padding: 10px;
+            background-color: #ff0000;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px 0;
+        }
+        .video-player {
+            width: 97%;
+            max-width: 500px;
+            height: 260px;
+            margin: 20px auto;
+            z-index: 1;
+            position: relative;
+            
+        }
+        .footer {
+            background-color: rgba(28, 28, 28, 0.8);
+            padding: 10px;
+            text-align: center;
+            color: #fff;
+            font-size: 14px;
+            position: relative;
+            z-index: 1;
+        }
+        .search-box {
+            width: 80%;
+            margin: 20px auto;
+            padding: 10px;
+            font-size: 16px;
+            background-color: #222;
+            color: #fff;
+            display: block;
+            border: none;
+            border-radius: 5px;
+        }
+        .channel-section {
+            margin: 20px;
+            z-index: 1;
+            position: relative;
+        }
+        .channel-category {
+            margin-bottom: 18px;
+            padding: 8px;
+            background-color: rgba(44, 44, 44, 0.8);
+            border-radius: 8px;
+        }
+        .channel-category h4 {
+            margin: 0 0 10px 0;
+            border-left: 1px solid #ff0000;
+            padding-left: 10px;
+        }
+        .channel-list {
+            display: flex;
+            gap: 7px;
+            overflow-x: auto; /* Horizontal scrolling */
+            padding-bottom: 8px;
+            padding-top: 6px;
+            scrollbar-width: thin;
+            scrollbar-color: #ff0000 #161616; /* Customize scrollbar */
+        }
+        .channel {
+            background-color: #333;
+            border-radius: 10px;
+            padding: 10px;
+            text-align: center;
+            width: 10px;
+            height: 100px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            cursor: pointer;
+            min-width: 100px;  /* Ensure consistent size */
+        }
+        .channel img {
+            width: 70px;
+            height: 40px;
+            margin-bottom: 5px;
+            border-radius: 5px;
+        }
+        .footer-text {
+            font-size: 14px;
+            color: #ff0000;
+            font-weight: bold;
+        }
+        .loading-message {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 20px;
+            color: #fff;
+            z-index: 2;
+        }
+    </style>
+<script type='text/javascript' src='//separatelysmackfibber.com/19/5c/18/195c186416f0a12831ae2a4ee87763df.js'></script>
+
+</head>
+<body>
+    <video autoplay muted loop class="background-video">
+        <source src="https://i.gifer.com/IrF.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+    <div class="header">
+        <div class="menu-icon" onclick="toggleDropdown()">☰</div>
+        <h1> 𝗠𝗝 𝐋𝐢𝐯𝐞ᵗᵛ</h1>
+    </div>
+    <div class="dropdown-menu" id="dropdown-menu">
+        <button onclick="window.open('https://t.me/Tawhid_NoBiTa', '_blank')">Contact Us</button>
+        <button onclick="window.open('https://manikganjflix.blogspot.com', '_blank')">Website</button>
+       
+    </div>
+
+    <div class="video-player" id="video-player">
+        <video id="video-source" class="video-js vjs-default-skin" controls preload="auto" width="100" height="500">
+            <source src="" type="application/x-mpegURL">
+            Your browser does not support the video tag.
+        </video>
+    </div>
+
+    <div class="search-box-wrapper">
+        <input type="text" id="search-box" class="search-box" placeholder="Search for channels..." oninput="filterChannels()">
+    </div>
+
+    <div class="channel-section" id="channel-section">
+        <!-- Channels will be loaded here -->
+    </div>
+
+    <div class="footer">
+        <div class="footer-text">Developed by @Tawhid_NoBiTa</div>
+
+    </div>
+
+    <script>
+        let allChannels = [];  // Store all channels globally
+        let player = videojs('video-source', {
+            controls: true,
+            autoplay: false,
+            preload: 'auto',
+            fluid: true,
+            controlBar: {
+                volumePanel: {inline: false}
+            }
         });
-        if (channels.length > 0) {
-            playChannel(channels[0].url);
+
+        async function fetchPlaylist(url) {
+            try {
+                const response = await fetch(url);
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                const data = await response.text();
+                console.log('Playlist data loaded successfully:', data);
+                const channels = parseM3U(data);
+                allChannels = channels;  // Save channels globally
+                renderChannels(channels);
+            } catch (error) {
+                console.error('Error fetching playlist:', error);
+            }
         }
-    }
 
-    function playChannel(url) {
-        const video = document.querySelector("#player");
-        if (Hls.isSupported()) {
-            const hls = new Hls();
-            hls.loadSource(url);
-            hls.attachMedia(video);
-        } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-            video.src = url;
+        function parseM3U(data) {
+            const lines = data.split('\n');
+            const channels = [];
+            let currentChannel = {};
+            let currentCategory = 'Uncategorized';
+
+            lines.forEach(line => {
+                if (line.startsWith('#EXTINF')) {
+                    const nameMatch = line.match(/,(.+)$/);
+                    if (nameMatch) {
+                        currentChannel.name = nameMatch[1];
+                    }
+                    const categoryMatch = line.match(/group-title="([^"]+)"/);
+                    if (categoryMatch) {
+                        currentCategory = categoryMatch[1];
+                    }
+                    const logoMatch = line.match(/tvg-logo="([^"]+)"/);
+                    if (logoMatch) {
+                        currentChannel.logo = logoMatch[1];
+                    }
+                } else if (line && !line.startsWith('#')) {
+                    currentChannel.url = line;
+                    currentChannel.category = currentCategory;
+                    channels.push(currentChannel);
+                    currentChannel = {};
+                }
+            });
+
+            console.log('Parsed channels:', channels);
+            return channels;
         }
-        player.play();
-        document.getElementById("playerContainer").scrollIntoView({ behavior: "smooth" });
-    }
 
-    function searchChannel() {
-        const query = document.getElementById("searchBox").value.toLowerCase().trim();
-        const channels = document.querySelectorAll(".channel");
-        channels.forEach(channel => {
-            const name = channel.querySelector("h3").innerText.toLowerCase();
-            channel.style.display = name.includes(query) ? "block" : "none";
-        });
-    }
+        function renderChannels(channels) {
+            const channelSection = document.getElementById('channel-section');
+            channelSection.innerHTML = '';
 
-    window.onload = loadM3U;
-</script>
+            const grouped = groupByCategory(channels);
+
+            for (const category in grouped) {
+                const categoryDiv = document.createElement('div');
+                categoryDiv.className = 'channel-category';
+                categoryDiv.innerHTML = `<h2>${category}</h2>`;
+
+                const channelList = document.createElement('div');
+                channelList.className = 'channel-list';
+
+                grouped[category].forEach(channel => {
+                    const channelDiv = document.createElement('div');
+                    channelDiv.className = 'channel';
+                    channelDiv.innerHTML = `
+                        <img src="${channel.logo || 'default-logo.png'}" alt="${channel.name} Logo">
+                        <div>${channel.name}</div>
+                    `;
+                    channelDiv.onclick = () => {
+                        playChannel(channel.url);
+                        scrollToPlayer();
+                    };
+                    channelList.appendChild(channelDiv);
+                });
+
+                categoryDiv.appendChild(channelList);
+                channelSection.appendChild(categoryDiv);
+            }
+        }
+
+        function groupByCategory(channels) {
+            const categories = {};
+            channels.forEach(channel => {
+                const category = channel.category || 'Uncategorized';
+                if (!categories[category]) {
+                    categories[category] = [];
+                }
+                categories[category].push(channel);
+            });
+            return categories;
+        }
+
+        function playChannel(url) {
+            const videoSource = document.getElementById('video-source');
+            videoSource.src = url;
+            player.src({ src: url, type: 'application/x-mpegURL' });
+            player.play();
+        }
+
+        function scrollToPlayer() {
+            const videoPlayer = document.getElementById('video-player');
+            videoPlayer.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function toggleDropdown() {
+            const dropdownMenu = document.getElementById('dropdown-menu');
+            dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
+        }
+
+        function filterChannels() {
+            const searchTerm = document.getElementById('search-box').value.toLowerCase();
+            const filteredChannels = allChannels.filter(channel => 
+                channel.name.toLowerCase().includes(searchTerm)
+            );
+            renderChannels(filteredChannels);
+        }
+
+        // Fetch playlist on page load
+        fetchPlaylist('https://m3u.work/CTZz13nw');
+    </script>
+
+<script type='text/javascript' src='//separatelysmackfibber.com/60/a0/f0/60a0f0c970425798eca9462d4ca161a5.js'></script>
 
 </body>
 </html>
+
+<script type="text/javascript">
+	atOptions = {
+		'key' : 'af05649aa91a38c122cc1bfbb170d2ba',
+		'format' : 'iframe',
+		'height' : 50,
+		'width' : 320,
+		'params' : {}
+	};
+</script>
+
+<script type="text/javascript" src="//www.highperformanceformat.com/af05649aa91a38c122cc1bfbb170d2ba/invoke.js"></script>
+
+<script type='text/javascript' src='//pl25669248.effectiveratecpm.com/60/a0/f0/60a0f0c970425798eca9462d4ca161a5.js'></script>
